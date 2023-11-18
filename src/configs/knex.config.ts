@@ -13,7 +13,7 @@ export const getKnexConfig = async (configService: ConfigService) => {
             },
             migrations: {
                 directory: './migrations/pg',
-                tableName: '[create-account.migration]'
+                tableName: '[accounts-create.migration]'
             }
         }
 
