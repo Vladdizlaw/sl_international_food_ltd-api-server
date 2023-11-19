@@ -1,10 +1,11 @@
 import { AccountService } from './account.service';
-import { Controller, Post, Body, Put, Param, Get, HttpException, HttpStatus, Delete } from '@nestjs/common'
+import { Controller, Post, Body, Put, Param, Get, HttpException, HttpStatus, Delete, UseGuards } from '@nestjs/common'
 import { CreateAccountDto } from './dto/create-account.dto';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 @Controller('account')
 export class AccountController {
     constructor(private readonly AccountService: AccountService) { }
-
+    @UseGuards(JwtAuthGuard)
     @Get()
     async getAll() {
         const accounts = await this.AccountService.findAllAccounts()
@@ -13,7 +14,7 @@ export class AccountController {
         }
         return accounts
     }
-
+    @UseGuards(JwtAuthGuard)
     @Get(':id')
     async get(@Param('id') id: string) {
         const account = await this.AccountService.findAccount(id)
@@ -22,7 +23,7 @@ export class AccountController {
         }
         return account
     }
-
+    @UseGuards(JwtAuthGuard)
     @Post()
     async create(@Body() dto: CreateAccountDto) {
         const account = await this.AccountService.createAccount(dto)
@@ -32,7 +33,7 @@ export class AccountController {
         return account
     }
 
-    
+    @UseGuards(JwtAuthGuard)
     @Delete(':id')
     async delete(@Param('id') id: string) {
         const account = await this.AccountService.deleteAccount(id)

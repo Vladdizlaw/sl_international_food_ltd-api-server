@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Knex } from 'knex';
 import { InjectConnection } from 'nest-knexjs';
-import { AuthDto } from './dto/auth.dto';
+import { AuthDto } from './dto/auth.dto';   
 
 @Injectable()
 export class AuthRepository {
@@ -9,8 +9,6 @@ export class AuthRepository {
 
     async signIn(authDto:AuthDto) {
         
-        const is = this.knex.table('accounts');
-        return is
     }
 
 

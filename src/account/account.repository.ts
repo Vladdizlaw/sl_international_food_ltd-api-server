@@ -16,6 +16,7 @@ export class AccountRepository {
     const account = this.knex.table('accounts').where({ id });
     return account
   }
+  
   async findByLogin(login: string) {
     const account = this.knex.table('accounts').where({ login });
     return account

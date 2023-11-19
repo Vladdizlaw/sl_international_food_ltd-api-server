@@ -1,4 +1,4 @@
-import { AccountRepository } from './acoount.repository';
+import { AccountRepository } from './account.repository';
 import { Injectable } from '@nestjs/common';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { genSaltSync, hashSync } from 'bcryptjs'
