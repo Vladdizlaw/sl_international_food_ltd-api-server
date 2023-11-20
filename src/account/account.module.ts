@@ -7,10 +7,7 @@ import { AccountRepository } from './account.repository';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 @Module({
-  providers: [AccountService, AccountRepository,{
-    provide: APP_GUARD,
-    useClass: JwtAuthGuard,
-  }],
+  providers: [AccountService, AccountRepository],
   imports: [KnexModule],
   controllers: [AccountController]
 })

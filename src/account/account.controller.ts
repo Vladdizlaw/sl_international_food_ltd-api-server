@@ -1,5 +1,5 @@
 import { AccountService } from './account.service';
-import { Controller, Post, Body, Put, Param, Get, HttpException, HttpStatus, Delete, UseGuards } from '@nestjs/common'
+import { Controller, Post, Body, Patch, Param, Get, HttpException, HttpStatus, Delete, UseGuards } from '@nestjs/common'
 import { CreateAccountDto } from './dto/create-account.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { RequestUser } from 'src/decorators/request-user.decorator';
@@ -9,7 +9,8 @@ import { RolesGuard } from 'src/auth/guards/role.guard';
 @Controller('account')
 export class AccountController {
     constructor(private readonly AccountService: AccountService) { }
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.Admin)
     @Get()
     async getAll() {
         const accounts = await this.AccountService.findAllAccounts()
@@ -18,12 +19,12 @@ export class AccountController {
         }
         return accounts
     }
-   
-    // @UseGuards(JwtAuthGuard)
-    @UseGuards(RolesGuard)
+
+
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Admin)
     @Get(':id')
-    async get(@Param('id') id: string, @RequestUser() user:string) {
+    async get(@Param('id') id: string, @RequestUser() user: string) {
         console.log(user)
         const account = await this.AccountService.findAccount(id)
         if (!account?.length) {
@@ -31,7 +32,8 @@ export class AccountController {
         }
         return account
     }
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.Admin)
     @Post()
     async create(@Body() dto: CreateAccountDto) {
         const account = await this.AccountService.createAccount(dto)
@@ -41,7 +43,8 @@ export class AccountController {
         return account
     }
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.Admin)
     @Delete(':id')
     async delete(@Param('id') id: string) {
         const account = await this.AccountService.deleteAccount(id)
