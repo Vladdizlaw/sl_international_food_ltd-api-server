@@ -2,6 +2,10 @@ import { AccountService } from './account.service';
 import { Controller, Post, Body, Put, Param, Get, HttpException, HttpStatus, Delete, UseGuards } from '@nestjs/common'
 import { CreateAccountDto } from './dto/create-account.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { RequestUser } from 'src/decorators/request-user.decorator';
+import { Roles } from 'src/decorators/role.decorator';
+import { Role } from 'src/enum/role.enum';
+import { RolesGuard } from 'src/auth/guards/role.guard';
 @Controller('account')
 export class AccountController {
     constructor(private readonly AccountService: AccountService) { }
@@ -14,9 +18,13 @@ export class AccountController {
         }
         return accounts
     }
-    @UseGuards(JwtAuthGuard)
+   
+    // @UseGuards(JwtAuthGuard)
+    @UseGuards(RolesGuard)
+    @Roles(Role.Admin)
     @Get(':id')
-    async get(@Param('id') id: string) {
+    async get(@Param('id') id: string, @RequestUser() user:string) {
+        console.log(user)
         const account = await this.AccountService.findAccount(id)
         if (!account?.length) {
             throw new HttpException('Account not found', HttpStatus.NOT_FOUND)

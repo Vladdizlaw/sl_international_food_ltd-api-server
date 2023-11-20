@@ -13,9 +13,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         })
     }
 
-    async validate({ login, password, role, id }) {
-        console.log({ login, password, role, id })
-        return { login, password, role, id }
+    async validate({ login, role, id }) {
+        return { login, role, id }
     }
 
 }
