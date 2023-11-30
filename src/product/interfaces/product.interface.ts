@@ -11,4 +11,5 @@ export interface Product {
     image_file: string
     created_at?: string
     updated_at?: string
+    category?:string
 }

@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   postgres:
-    container_name: db_sliftd
+    container_name: sliftd_db
     image: postgres
     command:
       - "postgres"
@@ -57,8 +57,49 @@ services:
           memory: 4G
     networks:
       - postgres
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sliftd_api
+    environment:
+        DB_HOST : 'sliftd_db'
+        DB_USER :  'root_admin'
+        DB_PSWD :  'Z0h1!b8*s4$' 
+        DB_NAME : 'SL_INTERNATIONAL_FOODS_LTD'
+        DB_PORT : '5432'
+        JWT_SECRET : 'SLJHWJFhcawihqwi*32t28923479273932hdsauohdao128305ska'
+    ports:
+      - '3000:3000'
+
+    volumes:
+      - ./src:/app/src
+    networks:
+    - postgres      
+
+  pgadmin:
+    container_name: pg_container
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "habrpguser@habr.com"
+      PGADMIN_DEFAULT_PASSWORD: "pgadminpwd4habr"
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 1G
+    networks:
+      - postgres    
+
 volumes:
   slifltd-db-data:
+  pgadmin-data:
 networks:
   postgres:
     driver: bridge  
