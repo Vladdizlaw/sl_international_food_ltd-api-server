@@ -1,25 +1,28 @@
 import { IsNotEmpty, IsString, MinLength, IsInt, Contains, IsOptional, ValidateIf } from "class-validator"
-import { ApiProperty } from '@nestjs/swagger';
-export class CreateAccountDto {
-    @ApiProperty()
+export class ProductDto {
     @IsNotEmpty()
-    @MinLength(4, { message: 'Login must be at least 4 characters' })
+    @IsInt()
+    id: number
+
+    @IsNotEmpty()
+    @MinLength(4, { message: 'name must be at least 4 characters' })
     @IsString()
-    @ApiProperty()
-    login: string
-    @ApiProperty()
+    item_name: string
+
     @IsNotEmpty()
+    @MinLength(4, { message: 'name must be at least 4 characters' })
+    @IsString()
+    item_code: string
+
     @IsString()
     @MinLength(4, { message: 'Password must be at least 4 characters' })
-    password: string
-    @ApiProperty()
+    barcode: string
+    
     @IsNotEmpty()
     @ValidateIf(value => ['admin', 'customer'].includes(value))
     role: 'admin' | 'customer'
-    @ApiProperty()
     @IsInt()
     balance: number
-    @ApiProperty()
     @IsString()
     @IsOptional()
     email?: string

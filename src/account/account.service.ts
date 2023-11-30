@@ -2,6 +2,7 @@ import { AccountRepository } from './account.repository';
 import { Injectable } from '@nestjs/common';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { genSaltSync, hashSync } from 'bcryptjs'
+import { UpdateAccountDto } from './dto/update-account.dto';
 
 @Injectable()
 export class AccountService {
@@ -32,6 +33,14 @@ export class AccountService {
             const salt = genSaltSync(10)
             accountDto.password = hashSync(accountDto.password, salt)
             const account = await this.AccountRepository.create(accountDto);
+            return account
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    async updateAccount({id, dto}:{id:string,dto: UpdateAccountDto}) {
+        try {
+            const account = await this.AccountRepository.update({id,dto});
             return account
         } catch (error) {
             console.log(error)

@@ -12,7 +12,7 @@ async function bootstrap() {
       transform: true
     })
   )
-
+  app.setGlobalPrefix('api')
   const config = new DocumentBuilder()
     .setTitle('SL_INTERNATIONAL_FOODS_LTD-API')
     .setDescription('The  API description')
@@ -20,7 +20,7 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('doc', app, document);
-  app.setGlobalPrefix('api')
+
   await app.listen(3000);
 }
 bootstrap();
