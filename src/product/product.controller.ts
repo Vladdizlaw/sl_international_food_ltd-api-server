@@ -19,8 +19,6 @@ export class ProductController {
     async getCategories() {
         const categories = await this.ProductService.getProductCategories()
         return categories
-        
-
     }
 
     @UseGuards(JwtAuthGuard, RolesGuard)

@@ -13,7 +13,7 @@ export class AccountRepository {
     return accounts
   }
 
-  async findById(id: string) {
+  async findById(id: number) {
     const account = this.knex.table('accounts').where({ id });
     return account
   }
@@ -28,12 +28,13 @@ export class AccountRepository {
     return account
   }
 
-  async delete(id: string) {
+  async delete(id: number) {
     const account = this.knex.table('accounts').delete().where({ id });
     return account
   }
 
-  async update({ id, dto }: { id: string, dto: UpdateAccountDto }) {
+  async update({ id, dto }: { id: number, dto: UpdateAccountDto }) {
     const account = this.knex.table('accounts').update(dto).returning('*').where({ id });
+    return account
   }
 }

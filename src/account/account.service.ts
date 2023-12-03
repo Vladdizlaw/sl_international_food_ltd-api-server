@@ -8,13 +8,13 @@ import { UpdateAccountDto } from './dto/update-account.dto';
 export class AccountService {
     constructor(private readonly AccountRepository: AccountRepository) { }
 
-    async findAccount(id: string) {
+    async findAccount(id: number) {
         try {
-            const account = await this.AccountRepository.findById(id);
-            console.log({ account });
+            const [account] = await this.AccountRepository.findById(id);
             return account
         } catch (error) {
             console.log(error)
+            throw new Error(error)
         }
     }
 
@@ -36,18 +36,19 @@ export class AccountService {
             return account
         } catch (error) {
             console.log(error)
+            throw new Error(error)
         }
     }
-    async updateAccount({id, dto}:{id:string,dto: UpdateAccountDto}) {
+    async updateAccount({ id, dto }: { id: number, dto: UpdateAccountDto }) {
         try {
-            const account = await this.AccountRepository.update({id,dto});
+            const account = await this.AccountRepository.update({ id, dto });
             return account
         } catch (error) {
             console.log(error)
         }
     }
 
-    async deleteAccount(id: string) {
+    async deleteAccount(id: number) {
         try {
             const account = await this.AccountRepository.delete(id);
             return account

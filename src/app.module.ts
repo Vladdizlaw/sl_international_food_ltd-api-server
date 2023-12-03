@@ -8,13 +8,14 @@ import { AccountModule } from './account/account.module';
 import { AuthModule } from './auth/auth.module';
 import { OrderModule } from './order/order.module';
 import { ProductModule } from './product/product.module';
+import { TransactionModule } from './transaction/transaction.module';
 
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true }), KnexModule.forRootAsync({
     imports: [ConfigModule],
     inject: [ConfigService],
     useFactory: getKnexConfig
-  }), AccountModule, AuthModule, OrderModule, ProductModule],
+  }), AccountModule, AuthModule, OrderModule, ProductModule, TransactionModule],
   controllers: [AppController],
   providers: [AppService],
 })

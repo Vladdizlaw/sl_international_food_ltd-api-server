@@ -9,7 +9,7 @@ export class ProductService {
         const productCategories = await this.ProductRepository.getProductCategories()
         return productCategories
     }
-    async getProduct(id: string): Promise<Product & { category: string }> {
+    async getProduct(id: string): Promise<Product > {
         const [product] = await this.ProductRepository.findById(id);
         return product
     }

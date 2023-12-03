@@ -24,8 +24,7 @@ export class AccountController {
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Admin)
     @Get(':id')
-    async get(@Param('id') id: string, @RequestUser() user: string) {
-        console.log(user)
+    async get(@Param('id') id: number, @RequestUser() user: string) {
         const account = await this.AccountService.findAccount(id)
         if (!account?.length) {
             throw new HttpException('Account not found', HttpStatus.NOT_FOUND)
@@ -46,7 +45,7 @@ export class AccountController {
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Admin)
     @Delete(':id')
-    async delete(@Param('id') id: string) {
+    async delete(@Param('id') id: number) {
         const account = await this.AccountService.deleteAccount(id)
         if (!account) {
             throw new HttpException('Account not found', HttpStatus.NOT_FOUND)
