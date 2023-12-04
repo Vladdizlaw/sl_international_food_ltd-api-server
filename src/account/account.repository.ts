@@ -33,8 +33,16 @@ export class AccountRepository {
     return account
   }
 
-  async update({ id, dto }: { id: number, dto: UpdateAccountDto }) {
-    const account = this.knex.table('accounts').update(dto).returning('*').where({ id });
-    return account
+  async update({ id, dto, db_transaction }: { id: number, dto: UpdateAccountDto, db_transaction?: Knex.Transaction<any, any[]> }) {
+    const trx = db_transaction || await this.knex.transaction()
+    try {
+      const account = trx('accounts').update(dto).returning('*').where({ id });
+      trx.commit()
+      return account
+    } catch (error) {
+      trx.rollback()
+      throw new Error(error)
+    }
+
   }
 }

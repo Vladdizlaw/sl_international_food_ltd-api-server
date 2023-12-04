@@ -24,7 +24,7 @@ export class AccountController {
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Admin)
     @Get(':id')
-    async get(@Param('id') id: number, @RequestUser() user: string) {
+    async get(@Param('id') id: number) {
         const account = await this.AccountService.findAccount(id)
         if (!account?.length) {
             throw new HttpException('Account not found', HttpStatus.NOT_FOUND)
