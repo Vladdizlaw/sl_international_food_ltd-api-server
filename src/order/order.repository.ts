@@ -4,17 +4,17 @@ import { InjectConnection } from 'nest-knexjs';
 // import { CreateAccountDto } from './dto/create-account.dto';
 
 @Injectable()
-export class ProductRepository {
+export class OrderRepository {
   constructor(@InjectConnection() private readonly knex: Knex) { }
 
   async findAll() {
-    const accounts = this.knex.table('products');
+    const accounts = this.knex.table('orders');
     return accounts
   }
 
   async findById(id: string) {
     try {
-      const account = this.knex.table('products').select(['products.*', 'product_categories.name as category']).leftJoin('product_categories', 'product_categories.id', 'products.category_id').where('products.id', id);
+      const account = this.knex.table('orders').select(['orders.*']).where('orders.id', id);
       return account
     } catch (error) {
       console.error(error);
