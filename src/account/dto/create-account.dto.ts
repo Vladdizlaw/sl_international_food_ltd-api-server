@@ -3,10 +3,10 @@ import { ApiProperty } from '@nestjs/swagger';
 export class CreateAccountDto {
     @ApiProperty()
     @IsNotEmpty()
-    @MinLength(4, { message: 'Login must be at least 4 characters' })
+    @MinLength(4, { message: 'Name must be at least 4 characters' })
     @IsString()
     @ApiProperty()
-    login: string
+    name: string
     @ApiProperty()
     @IsNotEmpty()
     @IsString()
@@ -14,13 +14,17 @@ export class CreateAccountDto {
     password: string
     @ApiProperty()
     @IsNotEmpty()
+    @IsString()
+    @MinLength(4, { message: 'Email must be at least 4 characters' })
+    email: string
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsString()
+    @MinLength(13, { message: 'Phone must be at least 13 characters' })
+    phone: string
+    @ApiProperty()
+    @IsNotEmpty()
     @ValidateIf(value => ['admin', 'customer'].includes(value))
     role: 'admin' | 'customer'
-    @ApiProperty()
-    @IsInt()
-    balance: number
-    @ApiProperty()
-    @IsString()
-    @IsOptional()
-    email?: string
+   
 } 

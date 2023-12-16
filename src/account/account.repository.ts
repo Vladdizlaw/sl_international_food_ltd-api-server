@@ -18,14 +18,18 @@ export class AccountRepository {
     return account
   }
 
-  async findByLogin(login: string) {
-    const account = this.knex.table('accounts').where({ login });
+  async findByEmail(email: string) {
+    const account = this.knex.table('accounts').where({ email });
     return account
   }
 
   async create(dto: CreateAccountDto) {
-    const account = this.knex.table('accounts').insert(dto).returning('*');
-    return account
+    try {
+      const account = this.knex.table('accounts').insert(dto).returning('*');
+      return account
+    } catch (error) {
+      throw new Error(error)
+    }
   }
 
   async delete(id: number) {
@@ -33,14 +37,11 @@ export class AccountRepository {
     return account
   }
 
-  async update({ id, dto, db_transaction }: { id: number, dto: UpdateAccountDto, db_transaction?: Knex.Transaction<any, any[]> }) {
-    const trx = db_transaction || await this.knex.transaction()
+  async update(id: number, dto: UpdateAccountDto) {
     try {
-      const account =  await trx('accounts').update(dto).returning('*').where({ id });
-      db_transaction || console.log(account)
+      const account = this.knex('accounts').update(dto).returning('*').where({ id });
       return account
     } catch (error) {
-      trx.rollback()
       throw new Error(error)
     }
 

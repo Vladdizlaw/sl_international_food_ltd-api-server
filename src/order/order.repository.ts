@@ -14,7 +14,25 @@ export class OrderRepository {
 
   async findById(id: string) {
     try {
-      const account = this.knex.table('orders').select(['orders.*']).where('orders.id', id);
+      const account = this.knex
+        .table('orders')
+        .select(['orders.*',
+          this.knex
+            .raw("ARRAY_AGG(json_build_object('orders_items')) as items")])
+        .leftJoin('orders_items', "order_items.order_id", 'orders.id')
+        .where('orders.id', id);
+
+      return account
+    } catch (error) {
+      console.error(error);
+    }
+
+  }
+  async findByAccountId(account_id: string) {
+    try {
+      const account = this.knex.table('orders')
+        .select(['orders.*'])
+        .where('orders.account_id', account_id);
       return account
     } catch (error) {
       console.error(error);
@@ -22,10 +40,9 @@ export class OrderRepository {
 
   }
 
-  async getProductCategories() {
-    const productCategories = this.knex.table('product_categories')
-    console.log(productCategories)
-    return productCategories
+  async create(dto) {
+    const order = this.knex.table('orders').insert(dto)
+    return order
   }
 
 }

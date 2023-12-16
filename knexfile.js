@@ -8,14 +8,15 @@ module.exports = {
 	connection: {
 		database: 'SL_INTERNATIONAL_FOODS_LTD',
 		user: 'root_admin',
-		password: 'Z0h1!b8*s4$'
+		password: 'Z0h1!b8*s4$',
+		port: 6543
 	},
 	pool: {
 		min: 2,
 		max: 10
 	},
 	migrations: {
-		tableName: 'accountscreate',
+		tableName: 'migrations',
 		loadExtensions: ['.js']
 	}
 }

@@ -39,9 +39,9 @@ export class AccountService {
             throw new Error(error)
         }
     }
-    async updateAccount({ id, dto }: { id: number, dto: UpdateAccountDto }) {
+    async updateAccount(id: number, dto: UpdateAccountDto) {
         try {
-            const account = await this.AccountRepository.update({ id, dto });
+            const account = await this.AccountRepository.update(id, dto);
             return account
         } catch (error) {
             console.log(error)

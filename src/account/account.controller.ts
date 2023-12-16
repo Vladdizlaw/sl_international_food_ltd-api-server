@@ -31,8 +31,8 @@ export class AccountController {
         }
         return account
     }
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles(Role.Admin)
+    // @UseGuards(JwtAuthGuard, RolesGuard)
+    // @Roles(Role.Admin)
     @Post()
     async create(@Body() dto: CreateAccountDto) {
         const account = await this.AccountService.createAccount(dto)
