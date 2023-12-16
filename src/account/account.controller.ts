@@ -31,13 +31,13 @@ export class AccountController {
         }
         return account
     }
-    // @UseGuards(JwtAuthGuard, RolesGuard)
-    // @Roles(Role.Admin)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.Admin)
     @Post()
     async create(@Body() dto: CreateAccountDto) {
-        const account = await this.AccountService.createAccount(dto)
+        const account = await this.AccountService.createCustomer(dto)
         if (!account) {
-            throw new HttpException('Account not created', HttpStatus.INTERNAL_SERVER_ERROR)
+            throw new HttpException('Customer not created', HttpStatus.INTERNAL_SERVER_ERROR)
         }
         return account
     }

@@ -28,10 +28,11 @@ export class AccountService {
         }
     }
 
-    async createAccount(accountDto: CreateAccountDto) {
+    async createCustomer(dto: CreateAccountDto) {
         try {
             const salt = genSaltSync(10)
-            accountDto.password = hashSync(accountDto.password, salt)
+            const password = hashSync(dto.password, salt)
+            const accountDto = { ...dto, password, role: 'customer' }
             const account = await this.AccountRepository.create(accountDto);
             return account
         } catch (error) {

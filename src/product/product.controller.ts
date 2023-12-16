@@ -1,5 +1,6 @@
+import { CreateProductDto } from './dto/create-product.dto';
 import { ProductService } from './product.service';
-import { Controller, UseGuards, Get, Param } from '@nestjs/common';
+import { Controller, UseGuards, Get, Param, Post, Body, HttpException, HttpStatus } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { RolesGuard } from 'src/auth/guards/role.guard';
 
@@ -12,6 +13,16 @@ export class ProductController {
     async getAll() {
         const products = await this.ProductService.getProducts()
         return products
+    }
+
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Post()
+    async createProduct(@Body() dto:CreateProductDto) {
+        const product = await this.ProductService.createProduct(dto)
+        if (!product) {
+            throw new HttpException('Product not created', HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+        return product
     }
 
     @Get('category')
