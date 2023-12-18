@@ -22,9 +22,6 @@ export class CreateAccountDto {
     @IsString()
     @MinLength(13, { message: 'Phone must be at least 13 characters' })
     phone: string
-    // @ApiProperty()
-    // @IsNotEmpty()
-    // @ValidateIf(value => ['admin', 'customer'].includes(value))
-    // role: 'admin' | 'customer'
+  
    
 } 

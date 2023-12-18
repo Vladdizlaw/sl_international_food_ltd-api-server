@@ -7,14 +7,15 @@ export interface Product {
     stock: number
     disckount: number
     shelf_life: number
-    unit_size:number
-    quantity_pack:string
-    unit_measure:string
+    unit_size: number
+    quantity_pack: string
+    unit_measure: string
     category_id: number
+    category?: string
     image_url: string
     alc_vol: string
     created_at?: string
     updated_at?: string
-    category?:string
+
 }
 

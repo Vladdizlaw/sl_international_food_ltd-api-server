@@ -9,6 +9,7 @@ import { RolesGuard } from 'src/auth/guards/role.guard';
 @Controller('account')
 export class AccountController {
     constructor(private readonly AccountService: AccountService) { }
+
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Admin)
     @Get()
@@ -20,7 +21,6 @@ export class AccountController {
         return accounts
     }
 
-
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Admin)
     @Get(':id')
@@ -31,6 +31,7 @@ export class AccountController {
         }
         return account
     }
+
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Admin)
     @Post()

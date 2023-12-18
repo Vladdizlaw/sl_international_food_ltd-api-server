@@ -4,11 +4,12 @@
  */
 exports.up = function (knex) {
 	return knex.schema
-		.dropTableIfExists('accounts')
+		.dropTableIfExists('account_statuses')
 		.createTable('account_statuses', function (table) {
 			table.increments('id')
 			table.string('name', 255).notNullable()
 		})
+		.dropTableIfExists('accounts')
 		.createTable('accounts', function (table) {
 			table.increments('id')
 			table.string('name', 255).unique().notNullable()
@@ -24,7 +25,7 @@ exports.up = function (knex) {
 				.foreign('status_id')
 				.references('account_statuses.id')
 				.deferrable('deferred')
-			table.string('note', 255)	
+			table.string('note', 255)
 			table.string('password', 255).notNullable()
 			table.string('role', 255).notNullable()
 			table.timestamps(true, true)

@@ -1,4 +1,4 @@
-import { accountStatuses } from './../constants/account-statuses.constant';
+import { accountStatuses } from './constants/account-statuses.constant';
 import { Injectable } from '@nestjs/common';
 import { Knex } from 'knex';
 import { InjectConnection } from 'nest-knexjs';
