@@ -1,4 +1,3 @@
-import { accountStatuses } from './constants/account-statuses.constant';
 import { Injectable } from '@nestjs/common';
 import { Knex } from 'knex';
 import { InjectConnection } from 'nest-knexjs';
@@ -15,7 +14,7 @@ export class AccountRepository {
   }
 
   async findById(id: number) {
-    const account = this.knex.table('accounts').where({ id });
+    const account = this.knex.table('accounts').where({ id:id });
     return account
   }
 
@@ -25,7 +24,7 @@ export class AccountRepository {
   }
 
   async create(dto: CreateAccountDto) {
-    const accountDto = { ...dto, status_id: accountStatuses.active }
+    const accountDto = { ...dto }
 
     try {
       const account = this.knex.table('accounts').insert(accountDto).returning('*');
