@@ -3,18 +3,18 @@ import { Injectable } from '@nestjs/common';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { genSaltSync, hashSync } from 'bcryptjs'
 import { UpdateAccountDto } from './dto/update-account.dto';
-
+import { accountStatuses } from './constants/account-statuses.constant'
 @Injectable()
 export class AccountService {
     constructor(private readonly AccountRepository: AccountRepository) { }
 
-    async findAccount(id: string) {
+    async findAccount(id: number) {
         try {
             const account = await this.AccountRepository.findById(id);
-            console.log({ account });
             return account
         } catch (error) {
             console.log(error)
+            throw new Error(error)
         }
     }
 
@@ -28,26 +28,28 @@ export class AccountService {
         }
     }
 
-    async createAccount(accountDto: CreateAccountDto) {
+    async createCustomer(dto: CreateAccountDto) {
         try {
             const salt = genSaltSync(10)
-            accountDto.password = hashSync(accountDto.password, salt)
+            const password = hashSync(dto.password, salt)
+            const accountDto = { ...dto, password, role: 'customer', status_id: accountStatuses.active }
             const account = await this.AccountRepository.create(accountDto);
             return account
         } catch (error) {
             console.log(error)
+            throw new Error(error)
         }
     }
-    async updateAccount({id, dto}:{id:string,dto: UpdateAccountDto}) {
+    async updateAccount(id: number, dto: UpdateAccountDto) {
         try {
-            const account = await this.AccountRepository.update({id,dto});
+            const account = await this.AccountRepository.update(id, dto);
             return account
         } catch (error) {
             console.log(error)
         }
     }
 
-    async deleteAccount(id: string) {
+    async deleteAccount(id: number) {
         try {
             const account = await this.AccountRepository.delete(id);
             return account

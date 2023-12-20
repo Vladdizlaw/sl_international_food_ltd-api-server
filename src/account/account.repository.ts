@@ -13,27 +13,39 @@ export class AccountRepository {
     return accounts
   }
 
-  async findById(id: string) {
-    const account = this.knex.table('accounts').where({ id });
+  async findById(id: number) {
+    const account = this.knex.table('accounts').where({ id:id });
     return account
   }
 
-  async findByLogin(login: string) {
-    const account = this.knex.table('accounts').where({ login });
+  async findByEmail(email: string) {
+    const account = this.knex.table('accounts').where({ email });
     return account
   }
 
   async create(dto: CreateAccountDto) {
-    const account = this.knex.table('accounts').insert(dto).returning('*');
-    return account
+    const accountDto = { ...dto }
+
+    try {
+      const account = this.knex.table('accounts').insert(accountDto).returning('*');
+      return account
+    } catch (error) {
+      throw new Error(error)
+    }
   }
 
-  async delete(id: string) {
+  async delete(id: number) {
     const account = this.knex.table('accounts').delete().where({ id });
     return account
   }
 
-  async update({ id, dto }: { id: string, dto: UpdateAccountDto }) {
-    const account = this.knex.table('accounts').update(dto).returning('*').where({ id });
+  async update(id: number, dto: UpdateAccountDto) {
+    try {
+      const account = this.knex('accounts').update(dto).returning('*').where({ id });
+      return account
+    } catch (error) {
+      throw new Error(error)
+    }
+
   }
 }

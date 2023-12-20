@@ -6,9 +6,11 @@ exports.seed = async function (knex) {
 	// Deletes ALL existing entries
 	await knex('product_categories').del()
 	await knex('product_categories').insert([
-		{ name: 'Lager' },
-		{ name: 'Ale' },
-		{ name: 'Porter' },
-		{ name: 'Pilsner’' }
+		{ name: 'Beer' },
+		{ name: 'Cider' },
+		{ name: 'Wine' },
+		{ name: 'Alcohol Free' },
+		{ name: 'Snaks' },
+		{ name: 'Cocktails' }
 	])
 }

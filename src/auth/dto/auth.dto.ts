@@ -4,7 +4,7 @@ export class AuthDto {
     @IsString()
     @IsNotEmpty()
     @ApiProperty()
-    login:string
+    email:string
     @IsNotEmpty()
     @IsString()
     @ApiProperty()
