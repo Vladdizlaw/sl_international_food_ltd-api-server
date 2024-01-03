@@ -1,4 +1,4 @@
 export const invoiceStatuses = {
-    unpaid: 1,
-    paid: 2
+	unpaid: 1,
+	paid: 2
 }

@@ -1,5 +1,5 @@
 export interface RequestAccount {
-    email:string
-    role: 'admin'|'customer'
-    id:number
+	email: string
+	role: 'admin' | 'customer'
+	id: number
 }
