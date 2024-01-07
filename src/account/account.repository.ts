@@ -6,10 +6,27 @@ import { UpdateAccountDto } from './dto/update-account.dto'
 
 @Injectable()
 export class AccountRepository {
-	constructor(@InjectConnection() private readonly knex: Knex) {}
+	constructor(@InjectConnection() private readonly knex: Knex) { }
 
-	async findAll() {
+	async findAll({filters}) {
 		const accounts = this.knex.table('accounts')
+			.select([
+				'accounts.id',
+				'accounts.name',
+				'accounts.company',
+				'accounts.email',
+				'accounts.phone',
+				'accounts.status_id',
+				'accounts.role',
+				'accounts.billing_address',
+				'accounts.delivery_address',
+				'accounts.created_at'
+			])
+			.count('orders.id as all_orders')
+			.count('orders.total_amount as order_total')
+			.leftJoin('orders', 'orders.account_id', 'accounts.id')
+			.groupBy('accounts.id')
+
 		return accounts
 	}
 

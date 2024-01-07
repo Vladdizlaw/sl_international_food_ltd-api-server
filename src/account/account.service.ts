@@ -8,7 +8,7 @@ import { accountStatuses } from './constants/account-statuses.constant'
 export class AccountService {
 	constructor(
 		private readonly AccountRepository: AccountRepository
-	) {}
+	) { }
 
 	async findAccount(id: number) {
 		try {
@@ -21,10 +21,10 @@ export class AccountService {
 		}
 	}
 
-	async findAllAccounts() {
+	async findAllAccounts(filters: object) {
 		try {
 			const accounts =
-				await this.AccountRepository.findAll()
+				await this.AccountRepository.findAll({ filters })
 			console.log({ accounts })
 			return accounts
 		} catch (error) {

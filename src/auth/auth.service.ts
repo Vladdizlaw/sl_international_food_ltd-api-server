@@ -19,13 +19,13 @@ export class AuthService {
 		if (!isPasswordCorrect) {
 			throw new UnauthorizedException('Bad password')
 		}
-		const { email, password, role, id } = account
+		const { email, password, role, id, name } = account
 		const accessToken = await this.JwtService.signAsync({
+			id,
 			email,
 			password,
-			role,
-			id
+			role
 		})
-		return { email, role, id, access_token: accessToken }
+		return { id, name, email, role, access_token: accessToken }
 	}
 }

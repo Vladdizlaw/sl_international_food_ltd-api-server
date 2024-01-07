@@ -6,6 +6,7 @@ import {
 	Patch,
 	Param,
 	Get,
+	Query,
 	HttpException,
 	HttpStatus,
 	Delete,
@@ -23,13 +24,16 @@ import { RequestAccount } from 'src/auth/interfaces/request-user.interface'
 import { UpdateAccountDto } from './dto/update-account.dto'
 @Controller('account')
 export class AccountController {
-	constructor(private readonly AccountService: AccountService) {}
+	constructor(private readonly AccountService: AccountService) { }
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles(Role.Admin)
 	@Get()
-	async getAll() {
-		const accounts = await this.AccountService.findAllAccounts()
+	async getAll(
+		@Query('filters') filters: object
+	) {
+		console.log(filters)
+		const accounts = await this.AccountService.findAllAccounts(filters)
 		if (!accounts) {
 			throw new HttpException('Accounts not found', HttpStatus.NOT_FOUND)
 		}
