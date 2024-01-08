@@ -3,13 +3,17 @@ import { Knex } from 'knex'
 import { InjectConnection } from 'nest-knexjs'
 import { CreateAccountDto } from './dto/create-account.dto'
 import { UpdateAccountDto } from './dto/update-account.dto'
+import { Pagination } from 'src/decorators/pagination-params.decorator'
+import { Filtering } from 'src/decorators/filtering-params.decorator'
+
 
 @Injectable()
 export class AccountRepository {
 	constructor(@InjectConnection() private readonly knex: Knex) { }
 
-	async findAll({filters}) {
-		const accounts = this.knex.table('accounts')
+	async findAll(pagination: Pagination, filter: Filtering, search: string) {
+		const itemsQuery = this.knex
+			.table('accounts')
 			.select([
 				'accounts.id',
 				'accounts.name',
@@ -27,7 +31,25 @@ export class AccountRepository {
 			.leftJoin('orders', 'orders.account_id', 'accounts.id')
 			.groupBy('accounts.id')
 
-		return accounts
+		if (filter) {
+			// const { name, id, company, email } = filter
+			// if (name) itemsQuery.whereIn('accounts.name', name)
+			// if (id) itemsQuery.whereIn('accounts.id', id)
+			// if (company) itemsQuery.whereIn('accounts.company', company)
+			Object.keys(filter).forEach(f => {
+				itemsQuery.whereIn(`accounts.${f}`, filter[f])
+			})
+		}
+		if (search) {
+			itemsQuery.whereLike('accounts.name', `%${search}%`)
+			itemsQuery.orWhereLike('accounts.company', `%${search}%`)
+			itemsQuery.orWhereLike('accounts.email', `%${search}%`)
+		}
+		itemsQuery.offset(pagination.offset).limit(pagination.limit)
+
+		const { count } = await this.knex.table('accounts').count('id').first()
+		const items = await itemsQuery
+		return { items, total: Number(count) }
 	}
 
 	async findById(id: number) {

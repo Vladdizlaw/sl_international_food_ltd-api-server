@@ -17,11 +17,18 @@ import { CreateAccountDto } from './dto/create-account.dto'
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard'
 import { RequestUser } from 'src/decorators/request-user.decorator'
 import { Roles } from 'src/decorators/role.decorator'
+import {
+	Pagination,
+	PaginationParams
+} from 'src/decorators/pagination-params.decorator'
 import { Role } from 'src/enum/role.enum'
 import { RolesGuard } from 'src/auth/guards/role.guard'
 import { Account } from './interfaces/account.interface'
 import { RequestAccount } from 'src/auth/interfaces/request-user.interface'
 import { UpdateAccountDto } from './dto/update-account.dto'
+import { PaginatedResource } from 'src/interfaces/paginated-resourse.interface'
+import { Filtering, FilteringParams } from 'src/decorators/filtering-params.decorator'
+import { SearchingParams } from 'src/decorators/search-params.decorator'
 @Controller('account')
 export class AccountController {
 	constructor(private readonly AccountService: AccountService) { }
@@ -30,14 +37,15 @@ export class AccountController {
 	@Roles(Role.Admin)
 	@Get()
 	async getAll(
-		@Query('filters') filters: object
-	) {
-		console.log(filters)
-		const accounts = await this.AccountService.findAllAccounts(filters)
-		if (!accounts) {
+		@PaginationParams() paginationParams: Pagination,
+		@FilteringParams(['name', 'id', 'company', 'email', 'status_id', 'phone']) filterParams?: Filtering,
+		@SearchingParams() searchParams?: string
+	): Promise<PaginatedResource<Account[]>> {
+		const data = await this.AccountService.findAllAccounts(paginationParams, filterParams, searchParams)
+		if (!data.items) {
 			throw new HttpException('Accounts not found', HttpStatus.NOT_FOUND)
 		}
-		return accounts
+		return { ...data, page: paginationParams.page, size: paginationParams.size }
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)

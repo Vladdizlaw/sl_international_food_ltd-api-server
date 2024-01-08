@@ -9,7 +9,7 @@ export class AuthService {
 	constructor(
 		private readonly AccountRepository: AccountRepository,
 		private readonly JwtService: JwtService
-	) { }
+	) {}
 	async signIn(authDto: AuthDto) {
 		const [account] = await this.AccountRepository.findByEmail(authDto.email)
 		if (!account) {
